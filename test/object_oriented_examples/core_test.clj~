@@ -1,0 +1,25 @@
+(ns object-oriented-examples.core-test
+  (:require [clojure.test :refer :all]
+            [object-oriented-examples.core :refer :all]))
+
+(defn book [n]
+  (keyword (str "BOOK" n)))
+(defn book-set [start end]
+  (map 
+   (fn [n] (book n)) 
+   (range start (inc end))))
+
+(testing "checkout"
+  (testing "one set of books"
+    (is (= 15.2 (checkout (book-set 1 2))))
+    (is (= 25.6 (checkout (book-set 1 4)))))
+  (testing "repeated books"
+    (is (= 32.0 (checkout (repeat 4 (book 1)))))
+    (is (= 64.0 (checkout (repeat 8 (book 3))))))
+  (testing "multiple sets of books"
+    (is (= 63.6 (flatten [(book-set 1 5) (book-set 1 4) (book 1)]))))
+  (testing "merge books"
+    (is (= [#{:BOOK1}] (merge-book [#{}] :BOOK1))))
+  (testing "add last empty"
+    (is (= [#{:a} #{}] (add-last-empty [#{:a}])))
+    (is (= [(atom #{})]y (add-last-empty [])))))
